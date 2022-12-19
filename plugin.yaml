@@ -1,0 +1,96 @@
+name: exemplo-plugin
+description: descricao plugin de exemplo
+display-name: exemplo-plugin
+picture: plugin.png
+category: backend # Ref: https://docs.stackspot.com/docs/create-stacks/yaml-files/plugin/#category
+compatibility:
+  - java
+  - spring
+about: docs/about.md
+usage: docs/usage.md
+use-case: docs/use-case.md
+implementation: docs/implementation.md
+technologies: # Ref: https://docs.stackspot.com/docs/create-stacks/yaml-files/yaml/#technologies
+  - "Api"
+types:
+  - app
+inputs:
+  - label: Usuario
+    type: text
+    name: login
+  - label: Senha
+    type: password
+    name: login_pass
+  - label: Database type 
+    type: text
+    name: driver
+    items:
+      - Mysql
+      - Oracle
+  - label: Nome da string de conexao do banco Oracle
+    type: text
+    name: stringdb 
+    default: oracledb
+    condition:
+      variable: driver
+      operator: "=="
+      value: Oracle          
+  - label: Nome do arquivo de configuracao do banco Oracle
+    type: text
+    name: Filename 
+    default: oracledbfile
+    condition:
+      variable: driver
+      operator: "=="
+      value: Oracle      
+  - label: Extensão do arquivo de conexao com o banco Oracle
+    type: text
+    name: Filenameextension
+    default: ora
+    condition:
+      variable: driver
+      operator: "=="
+      value: Oracle
+  - label: Nome da string de conexao do banco Mysql
+    type: text
+    name: stringdb 
+    default: mysqlinstance
+    condition:
+      variable: driver
+      operator: "=="
+      value: Mysql      
+  - label: Nome do arquivo de configuracao do banco Mysql
+    type: text
+    name: Filename 
+    default: mysqldbfile
+    condition:
+      variable: driver
+      operator: "=="
+      value: Mysql
+  - label: Extensão do arquivo de conexao com o banco Mysql
+    type: text
+    name: Filenameextension
+    default: sql
+    condition:
+      variable: driver
+      operator: "=="
+      value: Mysql       
+  - label: Questionamento..  
+    type: bool
+    name: faz_isso
+    default: false
+
+computedInputs:
+  filenameso: "{{inputs.Filename}}.{{Filenameextension}}"
+    
+hooks: 
+  - type: edit
+    trigger: after-render
+    path: "./{{computed_inputs.filenameso}}"
+    changes:
+      - search:
+          pattern: login=.*
+          replace-by:
+            value: login={{inputs.login}}
+          when:
+            exists: "login"

@@ -1,0 +1,5 @@
+login={{inputs.login}}
+senha={{inputs.login_pass}}
+conexaodb={{inputs.stringdb}}
+driver={{inputs.driver}}
+oi={{inputs.faz_isso}}
